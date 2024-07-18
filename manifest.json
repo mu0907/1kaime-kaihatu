@@ -1,0 +1,34 @@
+{
+    "manifest_version": 3,
+    "name": "Multifunctional Toolbar",
+    "version": "1.1",
+    "description": "A multifunctional toolbar with search, ad-block, weather, shortcuts, and news features.",
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": "icon.png"
+    },
+    "permissions": [
+      "activeTab",
+      "tabs",
+      "storage",
+      "geolocation",
+      "declarativeNetRequest",
+      "declarativeNetRequestWithHostAccess"
+    ],
+    "host_permissions": [
+      "<all_urls>"
+    ],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "declarative_net_request": {
+      "rule_resources": [
+        {
+          "id": "ruleset_1",
+          "enabled": true,
+          "path": "rules.json"
+        }
+      ]
+    }
+  }
+  
