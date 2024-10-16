@@ -1,152 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Extension Popup</title>
+  <title>toolbox</title>
   <style>
     body {
+      width: 250px;
+      padding: 20px;
       font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
       margin: 0;
-      padding: 0;
-      display: flex;
-      background-color: #f9f9f9;
-      height: 600px;
-      width: 400px;
     }
-    .sidebar {
-      width: 80px;
-      background-color: #333;
+    .toolbar {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      padding: 15px 0;
     }
-    .sidebar button {
-      background-color: #444;
-      color: #fff;
-      border: none;
-      padding: 15px;
-      cursor: pointer;
-      font-size: 16px;
-      margin: 10px 0;
-      width: 60px;
-      text-align: center;
-    }
-    .sidebar button:hover {
-      background-color: #555;
-    }
-    .main-content {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-    }
-    .content {
-      display: none;
+    input[type="text"], select, button {
       width: 100%;
-      flex-grow: 1;
-      overflow-y: auto;
-    }
-    .content.active {
-      display: block;
-    }
-    .box {
-      width: 100%;
-      background-color: #fff;
-      padding: 20px;
-      margin-top: 20px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
-    }
-    .box input {
-      width: calc(100% - 20px);
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
+      padding: 8px;
+      margin-bottom: 10px;
       border-radius: 5px;
+      border: 1px solid #ccc;
       font-size: 14px;
     }
-    .box div {
-      margin: 10px 0;
-      font-size: 14px;
-    }
-    .search-box {
-      width: 100%;
-      max-width: 600px;
-    }
-    .shortcut-buttons button {
-      width: 80px;
-      height: 80px;
-      margin: 10px;
-      background-color: #444;
-      color: #fff;
+    button {
+      background-color: #007bff;
+      color: white;
       border: none;
-      border-radius: 10px;
       cursor: pointer;
-      font-size: 14px;
     }
-    .shortcut-buttons button:hover {
-      background-color: #555;
+    button:hover {
+      background-color: #0056b3;
     }
-    .news-feed {
-      width: 100%;
-      max-height: 300px;
+    hr {
+      border: 0;
+      height: 1px;
+      background-color: #ccc;
+      margin: 20px 0;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 10px 0;
+      max-height: 150px;
       overflow-y: auto;
     }
-    .news-feed div {
-      margin: 10px 0;
+    li {
+      background-color: #fff;
+      padding: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 5px;
+      border-radius: 3px;
+    }
+    #userEmail {
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: #333;
     }
   </style>
 </head>
 <body>
-  <div class="sidebar">
-    <button id="homeButton">Home</button>
-    <button id="weatherButton">Weather</button>
-    <button id="chatButton">ChatGPT</button>
-    <button id="adBlockButton">Ad Blocker</button>
+  <div class="toolbar">
+    <input id="search" type="text" placeholder="検索...">
+    <select id="searchEngine">
+      <option value="google">Google</option>
+      <option value="yahoo">Yahoo</option>
+      <option value="bing">Bing</option>
+      <option value="duckduckgo">DuckDuckGo</option>
+      <option value="brave">Brave</option>
+    </select>
+    <button id="searchBtn">検索</button>
+    <button id="clearHistoryBtn">履歴を消去</button>
+    <hr>
+    <ul id="searchHistory"></ul>
+    <hr>
+    <button id="openTabsBtn">タブの管理</button>
+    <button id="blockAdsBtn">広告をブロック</button>
+    <button id="summaryBtn">ページの要約</button>
+    <button id="voiceCommandBtn">音声コマンド</button>
+    <button id="loginBtn">Googleアカウントでログイン</button>
+    <p id="userEmail"></p>
+    <button id="syncBtn">検索履歴を同期</button>
   </div>
-  <div class="main-content">
-    <div id="homeContent" class="content active">
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Search...">
-      </div>
-      <button id="weatherScreenButton">Weather</button>
-      <button id="chatScreenButton">ChatGPT</button>
-      <button id="adblockScreenButton">Ad Blocker</button>
-      <div class="shortcut-buttons">
-        <button onclick="openShortcut('https://mail.google.com')">Gmail</button>
-        <button onclick="openShortcut('https://drive.google.com')">Drive</button>
-        <button onclick="openShortcut('https://slack.com')">Slack</button>
-      </div>
-      <div class="news-feed">
-        <h3>News Feed</h3>
-        <div id="newsFeed"></div>
-      </div>
-    </div>
-    <div id="weatherContent" class="content">
-      <h2>Weather</h2>
-      <div class="box">
-        <button id="getWeather">Get Current Weather</button>
-        <div id="weather"></div>
-      </div>
-    </div>
-    <div id="chatContent" class="content">
-      <h2>ChatGPT</h2>
-      <div class="box">
-        <div id="chatMessages"></div>
-        <input type="text" id="chatInput" placeholder="Type your message...">
-      </div>
-    </div>
-    <div id="adblockContent" class="content">
-      <h2>Ad Blocker</h2>
-      <div class="box">
-        <button id="toggleAdBlocker">Toggle Ad Blocker</button>
-        <div id="adblockStatus"></div>
-      </div>
-    </div>
-  </div>
+
   <script src="popup.js"></script>
 </body>
 </html>

@@ -1,34 +1,50 @@
 {
-    "manifest_version": 3,
-    "name": "Multifunctional Toolbar",
-    "version": "1.1",
-    "description": "A multifunctional toolbar with search, ad-block, weather, shortcuts, and news features.",
-    "action": {
-      "default_popup": "popup.html",
-      "default_icon": "icon.png"
-    },
-    "permissions": [
-      "activeTab",
-      "tabs",
-      "storage",
-      "geolocation",
-      "declarativeNetRequest",
-      "declarativeNetRequestWithHostAccess"
-    ],
-    "host_permissions": [
-      "<all_urls>"
-    ],
-    "background": {
-      "service_worker": "background.js"
-    },
-    "declarative_net_request": {
-      "rule_resources": [
-        {
-          "id": "ruleset_1",
-          "enabled": true,
-          "path": "rules.json"
-        }
-      ]
+  "manifest_version": 3,
+  "name": "カスタム ツールバー拡張機能",
+  "version": "1.2",
+  "description": "ユーザーアカウント、検索履歴の同期、AIアシスタント、検索、ショートカット、広告ブロック、タブ管理機能を備えたカスタムツールバー。",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "tabs",
+    "bookmarks",
+    "storage",
+    "activeTab",
+    "history",
+    "declarativeNetRequest",
+    "scripting",
+    "identity",
+    "identity.email"
+  ],
+  "oauth2": {
+    "client_id": "<YOUR_GOOGLE_CLIENT_ID>",
+    "scopes": [
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "https://www.googleapis.com/auth/drive.file"
+    ]
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
     }
+  ],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "blockAds",
+        "enabled": true,
+        "path": "rules/block_ads.json"
+      }
+    ]
+  },
+  "icons": {
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
   }
-  
+}
